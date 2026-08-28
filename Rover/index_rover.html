@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars Rover Club — Aiden Kunsch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e2340;
+  --surface: #122a4e;
+  --surface-elev: #163257;
+  --border: #1e3a60;
+  --text: #e8e8e3;
+  --text-dim: #a8adb8;
+  --text-faint: #6b7a96;
+  --accent: #4ade80;
+  --grid: rgba(255, 255, 255, 0.02);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  min-height: 100vh;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 60px 60px;
+  overflow-x: hidden;
+}
+
+/* Topbar */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 14px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 100;
+  background: rgba(14, 35, 64, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.brand:hover { color: var(--accent); }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* Full-width image hero with overlay title + fade */
+.hero-visual {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-1 * (100vw - 100%) / 2);
+  height: 68vh;
+  min-height: 420px;
+  overflow: hidden;
+}
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(14, 35, 64, 0.35) 0%,
+    rgba(14, 35, 64, 0.55) 45%,
+    var(--bg) 100%
+  );
+}
+.hero-visual-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.hero-visual-text h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(40px, 7vw, 84px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  text-align: center;
+}
+
+/* Section wrapper */
+.section { padding: 56px 0; }
+.section-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500; letter-spacing: -0.02em;
+}
+
+/* Background section — text + photo */
+.background-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+}
+.background-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+}
+.background-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.background-text {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+.background-text p { margin-bottom: 18px; }
+.background-text p:last-child { margin-bottom: 0; }
+.background-text strong { color: var(--text); font-weight: 500; }
+
+.background-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.background-meta .accent { color: var(--accent); }
+.background-meta .divider { color: var(--border); }
+
+/* Project cards — simplified, fewer effects */
+.projects-list { display: flex; flex-direction: column; gap: 40px; }
+
+.project {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s ease;
+}
+.project:hover { border-color: var(--accent); }
+
+.project-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-elev);
+  min-height: 300px;
+}
+.project-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.project-content {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.project:nth-of-type(even) .project-image { order: 2; }
+.project:nth-of-type(even) .project-content { order: 1; }
+
+.project-meta-top {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-faint);
+}
+.project-type-badge { color: var(--accent); }
+.project-meta-top .divider { color: var(--border); }
+
+.project-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(22px, 2.8vw, 30px);
+  font-weight: 500; letter-spacing: -0.02em; line-height: 1.15;
+  color: var(--text);
+}
+
+.project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.7; }
+
+.project-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.skill-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.project-cta {
+  margin-top: 4px;
+  align-self: flex-start;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--accent);
+  transition: color 0.2s, border-color 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; border-left: none; border-right: none; border-top: none;
+  cursor: pointer; font: inherit;
+}
+.project-cta:hover { color: var(--text); border-color: var(--text); }
+
+/* Modal — kept, simplified (no corner brackets) */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8, 18, 35, 0.82);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none; align-items: center; justify-content: center;
+  padding: 40px 20px;
+  opacity: 0; transition: opacity 0.25s ease;
+}
+.modal-overlay.active { display: flex; opacity: 1; }
+
+.modal {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  max-width: 1100px; width: 100%; max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal { transform: translateY(0); }
+
+.modal-close {
+  position: sticky; top: 0; margin-left: auto;
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; font-size: 18px;
+  z-index: 5; margin: 14px 14px 0 auto;
+  transition: all 0.2s; float: right;
+}
+.modal-close:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+.modal-inner { padding: 48px 56px 56px; clear: both; }
+
+.modal-meta {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-faint); margin-bottom: 20px;
+}
+.modal-meta .accent { color: var(--accent); }
+.modal-meta .divider { color: var(--border); }
+
+.modal-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(26px, 3.4vw, 38px);
+  font-weight: 500; letter-spacing: -0.02em; line-height: 1.1;
+  color: var(--text); margin-bottom: 28px;
+}
+
+.modal-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px; margin-bottom: 32px;
+}
+.modal-photo {
+  position: relative; aspect-ratio: 4/3;
+  background: var(--surface-elev); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.modal-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.modal-body { display: grid; grid-template-columns: 1fr 200px; gap: 48px; align-items: start; }
+.modal-desc { font-size: 15px; line-height: 1.75; color: var(--text-dim); }
+.modal-desc p { margin-bottom: 16px; }
+.modal-desc p:last-child { margin-bottom: 0; }
+.modal-desc strong { color: var(--text); font-weight: 500; }
+
+.modal-sidebar { padding-left: 32px; border-left: 1px solid var(--border); }
+.modal-side-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+}
+.modal-skills-list { list-style: none; padding: 0; }
+.modal-skills-list li {
+  position: relative; padding-left: 16px;
+  font-size: 13px; line-height: 2; color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.modal-skills-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+
+body.modal-open { overflow: hidden; }
+
+/* Footer */
+.footer { padding: 40px 0 48px; text-align: center; border-top: 1px solid var(--border); }
+.footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 20px; }
+.footer-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-bottom {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .background-body { grid-template-columns: 1fr; gap: 24px; }
+  .background-photo { max-width: 320px; }
+  .project { grid-template-columns: 1fr; }
+  .project:nth-of-type(even) .project-image { order: 0; }
+  .project:nth-of-type(even) .project-content { order: 0; }
+  .project-image { min-height: 240px; aspect-ratio: 4/3; }
+  .project-content { padding: 28px 24px; }
+  .modal-inner { padding: 28px 24px; }
+  .modal-body { grid-template-columns: 1fr; gap: 32px; }
+  .modal-sidebar { padding-left: 0; padding-top: 24px; border-left: none; border-top: 1px solid var(--border); }
+  .modal-gallery { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .container, .topbar { padding-left: 20px; padding-right: 20px; }
+  .hero-visual { height: 50vh; min-height: 320px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="https://aidenkunsch.com/#projects" class="brand"><span>←</span> Home</a>
+</header>
+
+<!-- IMAGE HERO -->
+<div class="hero-visual">
+  <img src="../rover_banner.jpg" alt="Northeastern Mars Rover Club" onerror="this.style.display='none'">
+  <div class="hero-visual-text">
+    <h1>Mars Rover Team</h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BACKGROUND -->
+  <section class="section" id="background">
+    <div class="section-header">
+      <h2 class="section-title">Background</h2>
+    </div>
+    <div class="background-body">
+      <div class="background-text">
+        <p>The Northeastern Mars Rover Team builds a mock mars rover to compete at URC (university rover competition) as well as CIRC (Canadian international rover competition) every year. We engineer the rover to complete challenges including autonomous navigation, life detection, equipment servicing, and long distance terrain traversal. Every year we work to upgrade our rover, Watney, to be more capable in completing these challenges.</p>
+        <p>I have been with the Mars Rover Team since my first semester at Northeastern, and have attended two competitons in Utah and Canada, where we placed 2nd and 6th respectively. </p>
+        <p>As a <strong>mechanical co-lead</strong>, I manage task delegation and high level progress for the mechanical subteam and coordinate tasks with electrical and software teams. I also help to oversee onboarding and training new members.</p>
+        <p>Rover has provided me with so much experience in rapid prototyping, mechanical design, and team leadership. Workign with such a great team has undoubtedly been one of the most valuable experiences i've had at Northeastern. </p>
+      </div>
+      <div class="background-photo">
+        <img src="../rover-full.jpg" alt="Mars Rover Team" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT BREAKDOWN -->
+  <section class="section" id="subprojects">
+    <div class="section-header">
+      <h2 class="section-title">Project Breakdown</h2>
+    </div>
+
+    <div class="projects-list">
+
+      <!-- WHEEL REDESIGN -->
+      <article class="project">
+        <div class="project-image">
+          <img src="../rover-3.png" alt="Wheel redesign detail" onerror="this.style.display='none'">
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">Wheel Redesign</h3>
+          <p class="project-desc">
+            Redesigned the rover's wheels for improved stiffness and ground clearance after the original design
+            deformed under load and lost traction on rough terrain.
+          </p>
+          <div class="project-skills">
+            <span class="skill-tag">SolidWorks</span>
+            <span class="skill-tag">FDM Printing</span>
+            <span class="skill-tag">Materials Selection</span>
+            <span class="skill-tag">Iterative Testing</span>
+          </div>
+          <button type="button" class="project-cta">Read more <span class="arrow">→</span></button>
+        </div>
+        <template class="project-modal-data">
+          <div class="modal-meta">
+            <span class="accent">Mechanical Design</span>
+            <span class="divider">/</span>
+            <span>Wheels</span>
+            <span class="divider">/</span>
+            <span>Complete</span>
+          </div>
+          <h3 class="modal-title">Wheel Redesign</h3>
+          <div class="modal-gallery">
+            <div class="modal-photo"><img src="../rover-3.png" alt="Wheel redesign detail"></div>
+          </div>
+          <div class="modal-body">
+            <div class="modal-desc">
+              <p>The rover's original wheels deformed under load and lost traction on loose or uneven terrain — a recurring issue during field testing. I led a redesign focused on improving stiffness and ground clearance without adding significant weight.</p>
+              <p>I tested multiple spoke geometries and materials in SolidWorks, iterating on spoke count, rim thickness, and hub interface to find a design that balanced stiffness against traction and mass. Prototypes were manufactured with FDM printing to validate fit before committing to final materials.</p>
+              <p>The result is a stiffer wheel with better ground clearance, reducing deformation under load while keeping the traction profile the terrain requires.</p>
+            </div>
+            <div class="modal-sidebar">
+              <div class="modal-side-label">Skills</div>
+              <ul class="modal-skills-list">
+                <li>SolidWorks</li>
+                <li>FDM Printing</li>
+                <li>Materials Selection</li>
+                <li>Iterative Testing</li>
+              </ul>
+            </div>
+          </div>
+        </template>
+      </article>
+
+      <!-- GRIPPER -->
+      <article class="project">
+        <div class="project-image">
+          <img src="../rover-2.png" alt="Gripper / end effector detail" onerror="this.style.display='none'">
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">End Effector / Gripper</h3>
+          <p class="project-desc">
+            Reworked the gripper's jaw geometry and actuation linkage to reliably insert a USB drive and XLR
+            connector into a mock lander panel for the equipment servicing task.
+          </p>
+          <div class="project-skills">
+            <span class="skill-tag">SolidWorks</span>
+            <span class="skill-tag">Mechanism Design</span>
+            <span class="skill-tag">Hardware Integration</span>
+            <span class="skill-tag">FDM Printing</span>
+          </div>
+          <button type="button" class="project-cta">Read more <span class="arrow">→</span></button>
+        </div>
+        <template class="project-modal-data">
+          <div class="modal-meta">
+            <span class="accent">Mechanism Design</span>
+            <span class="divider">/</span>
+            <span>End Effector</span>
+            <span class="divider">/</span>
+            <span>Complete</span>
+          </div>
+          <h3 class="modal-title">End Effector / Gripper</h3>
+          <div class="modal-gallery">
+            <div class="modal-photo"><img src="../rover-2.png" alt="Gripper / end effector detail"></div>
+          </div>
+          <div class="modal-body">
+            <div class="modal-desc">
+              <p>The competition's equipment servicing task requires the rover to plug connectors — including a USB drive and an XLR connector — into a mock lander panel, which demands more dexterity and alignment tolerance than the original gripper design allowed.</p>
+              <p>I redesigned the end effector to widen its insertion tolerance and improve alignment feedback, reworking the jaw geometry and actuation linkage so the gripper could reliably seat both connector types without requiring pixel-perfect positioning from the drive team.</p>
+              <p>Hardware mounts for the power distribution board, cameras, and controllers on the rover were also part of this integration work, designed in SolidWorks and manufactured with FDM printing.</p>
+            </div>
+            <div class="modal-sidebar">
+              <div class="modal-side-label">Skills</div>
+              <ul class="modal-skills-list">
+                <li>SolidWorks</li>
+                <li>Mechanism Design</li>
+                <li>Hardware Integration</li>
+                <li>FDM Printing</li>
+              </ul>
+            </div>
+          </div>
+        </template>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://aidenkunsch.com/#projects">← Back to Portfolio</a>
+      <a href="mailto:aiden@kunsch.com">Email</a>
+    </div>
+    <div class="footer-bottom">© 2026 Aiden Kunsch</div>
+  </footer>
+
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal" role="document">
+    <button type="button" class="modal-close" aria-label="Close" id="modal-close">✕</button>
+    <div class="modal-inner" id="modal-inner"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const overlay = document.getElementById('project-modal');
+  const inner = document.getElementById('modal-inner');
+  const closeBtn = document.getElementById('modal-close');
+
+  function openModal(template) {
+    inner.innerHTML = '';
+    inner.appendChild(template.content.cloneNode(true));
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    overlay.querySelector('.modal').scrollTop = 0;
+  }
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => { inner.innerHTML = ''; }, 300);
+  }
+
+  document.querySelectorAll('.project').forEach(article => {
+    const btn = article.querySelector('.project-cta');
+    const tpl = article.querySelector('.project-modal-data');
+    if (btn && tpl) {
+      btn.addEventListener('click', () => openModal(tpl));
+    }
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+  });
+})();
+</script>
+
+</body>
+</html>
