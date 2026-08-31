@@ -207,15 +207,7 @@ section[id] { scroll-margin-top: 80px; }
   background: var(--surface);
   overflow: hidden;
 }
-.hero-photo::before, .hero-photo::after {
-  content: '';
-  position: absolute;
-  width: 10px; height: 10px;
-  border: 1px solid var(--accent);
-  z-index: 2;
-}
-.hero-photo::before { top: 7px; left: 7px; border-right: none; border-bottom: none; }
-.hero-photo::after  { bottom: 7px; right: 7px; border-left: none; border-top: none; }
+
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .hero-photo:nth-child(1) {
@@ -426,7 +418,7 @@ section[id] { scroll-margin-top: 80px; }
   margin-top: 8px;
   align-self: flex-start;
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
+  font-size: 18px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
@@ -450,7 +442,6 @@ button.project-cta {
   border: none;
   border-bottom: 1px solid var(--accent);
   cursor: pointer;
-  font: inherit;
 }
 
 /* Project Modal */
@@ -783,13 +774,13 @@ body.modal-open { overflow: hidden; }
       <div>
         <div class="about-text">
           <p>I'm a second year mechanical engineering student at <strong>Northeastern University</strong>, pursuing a minor in bioengineering.</p>
-          <p>Outside of coursework, I serve as <strong>mechanical co-lead</strong> for the Northeastern Mars Rover Club and am working with a nonprofit biotech incubator to set up a makerspace for early-stage biotech companies. I am a memeber of the Northeastern Theme Park Engineering Club, and participate in NEU's chapter of ASME.</p>
+          <p>Outside of coursework, I serve as <strong>mechanical co-lead</strong> for the Northeastern Mars Rover Team and am working with a nonprofit biotech incubator to set up a makerspace for early-stage medical device companies. I am also a memeber of the Northeastern Theme Park Engineering Club, and participate in NEU's chapter of ASME.</p>
           <p>Outside of engineering, I love traveling, skiing, performing music (🎺), and exploring Boston.</p>
         </div>
 
         <div class="about-meta">
           <div><span>CAD</span> SolidWorks · Fusion 360 · AutoCAD</div>
-          <div><span>Code</span> Python · MATLAB · C++</div>
+          <div><span>Code</span> Python · MATLAB · C++/Arduino</div>
           <div><span>Hardware</span> 3D Printing · Laser Cutting · CNC Machining · Embedded Hardware &amp; Microcontrollers</div>
         </div>
       </div>
@@ -819,8 +810,8 @@ body.modal-open { overflow: hidden; }
           <h3 class="project-title">Mars Rover Club</h3>
           <p class="project-desc">
             As mechanical co-lead, I work with an interdisciplinary team to design and integrate mechanical systems across the rover in preparation
-            for the university competitions. Recent work includes a wheel redesign improving stiffness
-            and ground clearance, and improvements to the end effector to improve dexterity for certain tasks.
+            for university competitions. Recent work includes a wheel redesign improving stiffness
+            and ground clearance, and modifications to the end effector to improve dexterity for certain tasks.
           </p>
           <div class="project-skills">
             <span class="skill-tag">SolidWorks</span>
@@ -828,7 +819,7 @@ body.modal-open { overflow: hidden; }
             <span class="skill-tag">Manufacturing</span>
             <span class="skill-tag">Team Leadership</span>
           </div>
-          <a href="https://aidenkunsch.com/rover/" class="project-cta">View full project <span class="arrow">→</span></a>
+          <a href="https://aidenkunsch.com/rover/" class="project-cta">Learn More <span class="arrow">→</span></a>
         </div>
       </article>
       <article class="project">
